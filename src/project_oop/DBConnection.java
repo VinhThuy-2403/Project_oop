@@ -4,10 +4,15 @@
  */
 package project_oop;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  *
  * @author Hp
  */
 public class DBConnection {
-    
+    public static Connection getConnection() throws SQLException, ClassNotFoundException{
+        return (Connection) SQLServerConnection.init();
+    }
 }
