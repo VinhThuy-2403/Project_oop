@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 public class DBUtils {
     
-    public static String getTenKhoa(Connection conn, String makhoa) throws SQLException, ClassNotFoundException
+    public static String getTenKhoa(Connection conn, String makhoa) throws SQLException
     {
         String sql = "Select * from Khoa where makhoa = ?";
         PreparedStatement pstm = conn.prepareStatement(sql);
@@ -28,7 +28,7 @@ public class DBUtils {
         return null;
     }
     
-    public static List<BacSi> listBacSi (Connection conn) throws SQLException, ClassNotFoundException
+    public static List<BacSi> listBacSi (Connection conn) throws SQLException
     {
         String sql = "Select * from BacSi";
         Statement stmt = conn.createStatement();
@@ -81,7 +81,7 @@ public class DBUtils {
     
     
     
-    public static void insertBacSi(Connection conn, BacSi bs) throws SQLException, ClassNotFoundException
+    public static void insertBacSi(Connection conn, BacSi bs) throws SQLException
     {
         String sql = "Insert BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, maChuyenKhoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong)"
                 + "values (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -103,4 +103,66 @@ public class DBUtils {
         
         pstm.executeUpdate();
     }
+    
+    public static void deleteBacSi(Connection conn, String id) throws SQLException
+    {
+        String sql = "Delete from BacSi where ID = ?";
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        
+        pstm.setString(1, id);
+        
+        pstm.executeUpdate();
+    }
+    
+    public static BacSi findBacSi(Connection conn, String id) throws SQLException
+    {
+        String sql = "Select * from BacSi where code = ?";
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setString(1, id);
+        ResultSet rs = pstm.executeQuery();
+        
+        while (rs.next())
+        {   
+            
+
+            String hoTen = rs.getString("hoTen");
+            
+            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
+            int ngay = ngaySinhLocal.getDayOfMonth(); 
+            int thang = ngaySinhLocal.getMonthValue(); 
+            int nam = ngaySinhLocal.getYear(); 
+
+            Date ns = new Date(ngay, thang, nam);
+            
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            
+            String makhoa = rs.getString("maChuyenKhoa");
+            String tenkhoa = getTenKhoa(conn, makhoa);
+            Khoa khoa = new Khoa(makhoa, tenkhoa);
+            
+            String chucVu = rs.getString("chucVu");
+            
+            
+            java.sql.Date ngayLamViec = rs.getDate("ngayVaoLamViec");
+            LocalDate ngayLamViecLocal = ngayLamViec.toLocalDate();
+            int ngayLV = ngayLamViecLocal.getDayOfMonth(); 
+            int thangLV = ngayLamViecLocal.getMonthValue(); 
+            int namLV = ngaySinhLocal.getYear(); 
+            Date ngayVaoLamViec = new Date(ngayLV, thangLV, namLV);
+            
+            float luongCoBan = rs.getFloat("luongCoBan");
+            float heSoLuong = rs.getFloat("heSoLuong");
+            
+            BacSi bs = new BacSi(id, hoTen, ns, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
+            return bs;
+        }
+        return null;
+    }
+    
+    
+    
 }
