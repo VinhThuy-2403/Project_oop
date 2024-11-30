@@ -4,6 +4,8 @@
  */
 package project_oop;
 
+
+import java.util.Calendar;
 /**
  *
  * @author homin
@@ -28,6 +30,14 @@ public class Date {
             this.Year = Year;
         }
         else Year = 1;  
+    }
+    
+    //Chuyen doi sang kieu Date trong sqls
+    public java.sql.Date toSqlDate() {
+        // Xây dựng chuỗi ngày tháng theo định dạng yyyy-MM-dd
+        String formattedDate = String.format("%04d-%02d-%02d", this.Year, this.Month, this.Day);
+        // Chuyển đổi chuỗi thành java.sql.Date
+        return java.sql.Date.valueOf(formattedDate);
     }
 
     public int getDay() {
