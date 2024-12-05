@@ -116,7 +116,7 @@ public class DBUtils {
     
     public static BacSi findBacSi(Connection conn, String id) throws SQLException
     {
-        String sql = "Select * from BacSi where code = ?";
+        String sql = "Select * from BacSi where ID = ?";
         PreparedStatement pstm = conn.prepareStatement(sql);
         pstm.setString(1, id);
         ResultSet rs = pstm.executeQuery();
@@ -163,6 +163,206 @@ public class DBUtils {
         return null;
     }
     
+    public static void updateBacSi(Connection conn, String id, BacSi bs) throws SQLException
+    {
+        BacSi oldbs = findBacSi(conn, id);
+        if (oldbs == null)
+        {
+            insertBacSi(conn, bs);
+        }
+        else
+        {
+            String sql = "Update BacSi set hoTen = ?, ngaySinh = ?, diaChi = ?, gioiTinh = ?, sdt=?,"
+                    + "quocTich = ?, maChuyenKhoa = ?, chucVu = ?, ngayVaoLamViec = ?, luongCoBan = ?, "
+                    + "heSoLuong = ? where ID = ?";
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            
+            pstm.setString(1, bs.getHoTen());
+            pstm.setDate(2, bs.getNgaySinh().toSqlDate());
+            pstm.setString(3, bs.getDiaChi());
+            pstm.setString(4, bs.getGioiTinh());
+            pstm.setString(5, bs.getSdt());
+            pstm.setString(6, bs.getQuocTich());
+            pstm.setString(7, bs.getChuyenKhoa().getMaKhoa());
+            pstm.setString(8, bs.getChucVu());
+            pstm.setDate(9, bs.getNgayVaoLamViec().toSqlDate()); // Chuyển đổi sang java.sql.Date
+            pstm.setFloat(10, bs.getLuongCoBan());
+            pstm.setFloat(11, bs.getHeSoLuong());
+            pstm.setString(12, id);
+            
+            pstm.executeUpdate();
+        }
+    }
     
+    
+    
+    //////////////////////////////////
+    //////Benh Nhan///////////////////
+    /////////////////////////////////
+    public static List<BenhNhan> listBenhNhan (Connection conn) throws SQLException
+    {
+        String sql = "Select * from BenhNhan";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        List<BenhNhan> listBN = new ArrayList<BenhNhan>();
+        
+        while (rs.next())
+        {
+            String maBN = rs.getString("maBN");
+            String hoTen = rs.getString("hoTen");
+            String tenbenhan = rs.getString("tenBenhAn");
+            
+            java.sql.Date ngaykham = rs.getDate("ngayKham");
+            LocalDate ngayk = ngaykham.toLocalDate();
+            int ngaykh = ngayk.getDayOfMonth(); 
+            int thangkh = ngayk.getMonthValue(); 
+            int namkh = ngayk.getYear(); 
+
+            Date nk = new Date(ngaykh, thangkh, namkh);
+            
+            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
+            int ngay = ngaySinhLocal.getDayOfMonth(); 
+            int thang = ngaySinhLocal.getMonthValue(); 
+            int nam = ngaySinhLocal.getYear(); 
+
+            Date ns = new Date(ngay, thang, nam);
+            
+            
+            
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            
+            String makhoakham = rs.getString("maKhoaKham");
+            String tenkhoa = getTenKhoa(conn, makhoakham);
+            Khoa khoakham = new Khoa(makhoakham, tenkhoa);
+
+            boolean nhapvien = rs.getBoolean("nhapVien");
+            
+            BenhNhan bn = new BenhNhan(maBN, hoTen, tenbenhan, nk, ns, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
+            
+            listBN.add(bn);
+            
+        }
+        return listBN;
+    }
+    
+    
+    public static void insertBenhNhan(Connection conn, BenhNhan bn) throws SQLException
+    {
+        String sql = "INSERT INTO BenhNhan (maBN, hoTen, tenBenhAn, ngayKham, ngaySinh, diaChi, gioiTinh, sdt, quocTich, maKhoaKham, nhapVien)"
+                + "values (?,?,?,?,?,?,?,?,?,?,?)";
+        
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        
+        pstm.setString(1, bn.getMaBN());                        
+        pstm.setString(2, bn.getHoTen());                        
+        pstm.setString(3, bn.getTenBenhAn());
+        pstm.setDate(4, bn.getNgayKham().toSqlDate());
+        pstm.setDate(5, bn.getNgaySinh().toSqlDate());
+        pstm.setString(6, bn.getDiaChi());
+        pstm.setString(7, bn.getGioiTinh());
+        pstm.setString(8, bn.getSdt());
+        pstm.setString(9, bn.getQuocTich());
+        pstm.setString(10, bn.getKhoaKham().getMaKhoa());
+        pstm.setBoolean(11, bn.isNhapVien());
+        
+        pstm.executeUpdate();
+    }
+    
+    
+    public static void deleteBenhNhan(Connection conn, String maBN) throws SQLException
+    {
+        String sql = "Delete from BenhNhan where maBN = ?";
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        
+        pstm.setString(1, maBN);
+        
+        pstm.executeUpdate();
+    }
+    
+    public static BenhNhan findBenhNhan(Connection conn, String maBN) throws SQLException
+    {
+        String sql = "Select * from BenhNhan where maBN = ?";
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setString(1, maBN);
+        ResultSet rs = pstm.executeQuery();
+        
+        while (rs.next())
+        {   
+            
+            String hoTen = rs.getString("hoTen");
+            String tenbenhan = rs.getString("tenBenhAn");
+            
+            java.sql.Date ngaykham = rs.getDate("ngayKham");
+            LocalDate ngayk = ngaykham.toLocalDate();
+            int ngaykh = ngayk.getDayOfMonth(); 
+            int thangkh = ngayk.getMonthValue(); 
+            int namkh = ngayk.getYear(); 
+
+            Date nk = new Date(ngaykh, thangkh, namkh);
+            
+            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
+            int ngay = ngaySinhLocal.getDayOfMonth(); 
+            int thang = ngaySinhLocal.getMonthValue(); 
+            int nam = ngaySinhLocal.getYear(); 
+
+            Date ns = new Date(ngay, thang, nam);
+            
+            
+            
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            
+            String makhoakham = rs.getString("maKhoaKham");
+            String tenkhoa = getTenKhoa(conn, makhoakham);
+            Khoa khoakham = new Khoa(makhoakham, tenkhoa);
+
+            boolean nhapvien = rs.getBoolean("nhapVien");
+            
+            BenhNhan bn = new BenhNhan(maBN, hoTen, tenbenhan, nk, ns, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
+            
+            return bn;
+
+        }
+        return null;
+    }
+    
+    public static void updateBenhNhan(Connection conn, String maBN, BenhNhan bn) throws SQLException
+    {
+        BenhNhan oldbn = findBenhNhan(conn, maBN);
+        if (oldbn == null)
+        {
+            insertBenhNhan(conn, bn);
+        }
+        else
+        {
+            String sql = "UPDATE BenhNhan SET hoTen = ?, tenBenhAn = ?, ngayKham = ?, ngaySinh = ?, diaChi = ?, "
+                + "gioiTinh = ?, sdt = ?, quocTich = ?, maKhoaKham = ?, nhapVien = ? WHERE maBN = ?";
+
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            
+                                   
+            pstm.setString(1, bn.getHoTen());                        
+            pstm.setString(2, bn.getTenBenhAn());
+            pstm.setDate(3, bn.getNgayKham().toSqlDate());
+            pstm.setDate(4, bn.getNgaySinh().toSqlDate());
+            pstm.setString(5, bn.getDiaChi());
+            pstm.setString(6, bn.getGioiTinh());
+            pstm.setString(7, bn.getSdt());
+            pstm.setString(8, bn.getQuocTich());
+            pstm.setString(9, bn.getKhoaKham().getMaKhoa());
+            pstm.setBoolean(10, bn.isNhapVien());
+            pstm.setString(11, bn.getMaBN()); 
+            
+            pstm.executeUpdate();
+        }
+    }
     
 }
