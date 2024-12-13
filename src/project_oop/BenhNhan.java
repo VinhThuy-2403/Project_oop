@@ -11,11 +11,11 @@ package project_oop;
 public class BenhNhan extends Person{
     private String maBN;
     private String tenBenhAn;
-    private Date ngayKham;
+    private String ngayKham;
     private Khoa khoaKham;
     private boolean nhapVien;
 
-    public BenhNhan(String maBN, String hoTen, String tenBenhAn, Date ngayKham, Date ngaySinh, String diaChi, String gioiTinh, String sdt, String quocTich, Khoa khoaKham, boolean nhapVien) {
+    public BenhNhan(String maBN, String hoTen, String tenBenhAn, String ngayKham, String ngaySinh, String diaChi, String gioiTinh, String sdt, String quocTich, Khoa khoaKham, boolean nhapVien) {
         super(hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich);
         this.maBN = maBN;
         this.tenBenhAn = tenBenhAn;
@@ -43,11 +43,11 @@ public class BenhNhan extends Person{
         this.tenBenhAn = tenBenhAn;
     }
 
-    public Date getNgayKham() {
+    public String getNgayKham() {
         return ngayKham;
     }
 
-    public void setNgayKham(Date ngayKham) {
+    public void setNgayKham(String ngayKham) {
         this.ngayKham = ngayKham;
     }
 

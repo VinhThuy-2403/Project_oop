@@ -12,11 +12,11 @@ public class BacSi extends Person{
     private String ID;
     private Khoa ChuyenKhoa;
     private String chucVu;
-    private Date ngayVaoLamViec;
+    private String ngayVaoLamViec;
     private float luongCoBan;
     private float heSoLuong;
 
-    public BacSi(String ID, String hoTen, Date ngaySinh, String diaChi, String gioiTinh, String sdt, String quocTich, Khoa ChuyenKhoa, String chucVu, Date ngayVaoLamViec, float luongCoBan, float heSoLuong) {
+    public BacSi(String ID, String hoTen, String ngaySinh, String diaChi, String gioiTinh, String sdt, String quocTich, Khoa ChuyenKhoa, String chucVu, String ngayVaoLamViec, float luongCoBan, float heSoLuong) {
         super(hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich);
         this.ID = ID;
         this.ChuyenKhoa = ChuyenKhoa;
@@ -54,11 +54,11 @@ public class BacSi extends Person{
         this.chucVu = chucVu;
     }
 
-    public Date getNgayVaoLamViec() {
+    public String getNgayVaoLamViec() {
         return ngayVaoLamViec;
     }
 
-    public void setNgayVaoLamViec(Date ngayVaoLamViec) {
+    public void setNgayVaoLamViec(String ngayVaoLamViec) {
         this.ngayVaoLamViec = ngayVaoLamViec;
     }
 

@@ -10,13 +10,13 @@ package project_oop;
  */
 public class Person {
     private String hoTen;
-    private Date ngaySinh;
+    private String ngaySinh;
     private String diaChi;
     private String gioiTinh;
     private String sdt;
     private String quocTich;
 
-    public Person(String hoTen, Date ngaySinh, String diaChi, String gioiTinh, String sdt, String quocTich) {
+    public Person(String hoTen, String ngaySinh, String diaChi, String gioiTinh, String sdt, String quocTich) {
         this.hoTen = hoTen;
         this.ngaySinh = ngaySinh;
         this.diaChi = diaChi;
@@ -36,11 +36,11 @@ public class Person {
         this.hoTen = hoTen;
     }
 
-    public Date getNgaySinh() {
+    public String getNgaySinh() {
         return ngaySinh;
     }
 
-    public void setNgaySinh(Date ngaySinh) {
+    public void setNgaySinh(String ngaySinh) {
         this.ngaySinh = ngaySinh;
     }
 

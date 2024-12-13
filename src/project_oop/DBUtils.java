@@ -6,7 +6,7 @@ package project_oop;
 
 import java.sql.*;
 import java.util.*;
-import java.time.LocalDate;
+import java.time.*;
 
 /**
  *
@@ -39,17 +39,8 @@ public class DBUtils {
         while (rs.next())
         {
             String ID = rs.getString("ID");
-
             String hoTen = rs.getString("hoTen");
-            
-            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
-            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
-            int ngay = ngaySinhLocal.getDayOfMonth(); 
-            int thang = ngaySinhLocal.getMonthValue(); 
-            int nam = ngaySinhLocal.getYear(); 
-
-            Date ns = new Date(ngay, thang, nam);
-            
+            String ngaySinh = rs.getString("ngaySinh");
             String diaChi = rs.getString("diaChi");
             String gioiTinh = rs.getString("gioiTinh");
             String sdt = rs.getString("sdt");
@@ -60,19 +51,11 @@ public class DBUtils {
             Khoa khoa = new Khoa(makhoa, tenkhoa);
             
             String chucVu = rs.getString("chucVu");
-            
-            
-            java.sql.Date ngayLamViec = rs.getDate("ngayVaoLamViec");
-            LocalDate ngayLamViecLocal = ngayLamViec.toLocalDate();
-            int ngayLV = ngayLamViecLocal.getDayOfMonth(); 
-            int thangLV = ngayLamViecLocal.getMonthValue(); 
-            int namLV = ngaySinhLocal.getYear(); 
-            Date ngayVaoLamViec = new Date(ngayLV, thangLV, namLV);
-            
+            String ngayVaoLamViec = rs.getString("ngayVaoLamViec");
             float luongCoBan = rs.getFloat("luongCoBan");
             float heSoLuong = rs.getFloat("heSoLuong");
             
-            BacSi bs = new BacSi(ID, hoTen, ns, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
+            BacSi bs = new BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
             
             listBS.add(bs);
         }
@@ -81,29 +64,27 @@ public class DBUtils {
     
     
     
-    public static void insertBacSi(Connection conn, BacSi bs) throws SQLException
-    {
-        String sql = "Insert BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, maChuyenKhoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong)"
-                + "values (?,?,?,?,?,?,?,?,?,?,?,?)";
-        
+    public static void insertBacSi(Connection conn, BacSi bs) throws SQLException {
+        String sql = "insert into BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, maChuyenKhoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong) "
+                   + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         PreparedStatement pstm = conn.prepareStatement(sql);
-        
+
         pstm.setString(1, bs.getID());
         pstm.setString(2, bs.getHoTen());
-        pstm.setDate(3, bs.getNgaySinh().toSqlDate()); // Chuyển đổi sang java.sql.Date
+        pstm.setString(3, bs.getNgaySinh()); 
         pstm.setString(4, bs.getDiaChi());
         pstm.setString(5, bs.getGioiTinh());
         pstm.setString(6, bs.getSdt());
         pstm.setString(7, bs.getQuocTich());
         pstm.setString(8, bs.getChuyenKhoa().getMaKhoa());
         pstm.setString(9, bs.getChucVu());
-        pstm.setDate(10, bs.getNgayVaoLamViec().toSqlDate()); // Chuyển đổi sang java.sql.Date
+        pstm.setString(10, bs.getNgayVaoLamViec()); 
         pstm.setFloat(11, bs.getLuongCoBan());
         pstm.setFloat(12, bs.getHeSoLuong());
-        
+
         pstm.executeUpdate();
     }
-    
     public static void deleteBacSi(Connection conn, String id) throws SQLException
     {
         String sql = "Delete from BacSi where ID = ?";
@@ -126,38 +107,20 @@ public class DBUtils {
             
 
             String hoTen = rs.getString("hoTen");
-            
-            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
-            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
-            int ngay = ngaySinhLocal.getDayOfMonth(); 
-            int thang = ngaySinhLocal.getMonthValue(); 
-            int nam = ngaySinhLocal.getYear(); 
-
-            Date ns = new Date(ngay, thang, nam);
-            
+            String ngaySinh = rs.getString("ngaySinh");
             String diaChi = rs.getString("diaChi");
             String gioiTinh = rs.getString("gioiTinh");
             String sdt = rs.getString("sdt");
-            String quocTich = rs.getString("quocTich");
-            
+            String quocTich = rs.getString("quocTich");      
             String makhoa = rs.getString("maChuyenKhoa");
             String tenkhoa = getTenKhoa(conn, makhoa);
             Khoa khoa = new Khoa(makhoa, tenkhoa);
-            
             String chucVu = rs.getString("chucVu");
-            
-            
-            java.sql.Date ngayLamViec = rs.getDate("ngayVaoLamViec");
-            LocalDate ngayLamViecLocal = ngayLamViec.toLocalDate();
-            int ngayLV = ngayLamViecLocal.getDayOfMonth(); 
-            int thangLV = ngayLamViecLocal.getMonthValue(); 
-            int namLV = ngaySinhLocal.getYear(); 
-            Date ngayVaoLamViec = new Date(ngayLV, thangLV, namLV);
-            
+            String ngayVaoLamViec = rs.getString("ngayVaoLamViec");
             float luongCoBan = rs.getFloat("luongCoBan");
             float heSoLuong = rs.getFloat("heSoLuong");
             
-            BacSi bs = new BacSi(id, hoTen, ns, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
+            BacSi bs = new BacSi(id, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
             return bs;
         }
         return null;
@@ -178,14 +141,14 @@ public class DBUtils {
             PreparedStatement pstm = conn.prepareStatement(sql);
             
             pstm.setString(1, bs.getHoTen());
-            pstm.setDate(2, bs.getNgaySinh().toSqlDate());
+            pstm.setString(2, bs.getNgaySinh());
             pstm.setString(3, bs.getDiaChi());
             pstm.setString(4, bs.getGioiTinh());
             pstm.setString(5, bs.getSdt());
             pstm.setString(6, bs.getQuocTich());
             pstm.setString(7, bs.getChuyenKhoa().getMaKhoa());
             pstm.setString(8, bs.getChucVu());
-            pstm.setDate(9, bs.getNgayVaoLamViec().toSqlDate()); // Chuyển đổi sang java.sql.Date
+            pstm.setString(9, bs.getNgayVaoLamViec());
             pstm.setFloat(10, bs.getLuongCoBan());
             pstm.setFloat(11, bs.getHeSoLuong());
             pstm.setString(12, id);
@@ -194,6 +157,84 @@ public class DBUtils {
         }
     }
     
+    public static List<BacSi> listChucvu(Connection conn, String chucVu) throws SQLException{
+        String sql = "Select * from BacSi where chucVu= ?";
+        PreparedStatement psmt = conn.prepareStatement(sql);
+        ResultSet rs = psmt.executeQuery();
+        psmt.setString(1, chucVu);
+        List<BacSi> listbyChucVu = new ArrayList<>();
+        while (rs.next()){
+            String ID = rs.getString("ID");
+            String hoTen = rs.getString("hoTen");
+            String ngaySinh = rs.getString("ngaySinh");
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            String maKhoa = rs.getString("maChuyenKhoa");
+            String tenKhoa = getTenKhoa(conn, maKhoa);
+            Khoa khoa = new Khoa(maKhoa, tenKhoa);
+            String ngayVaoLamViec = rs.getString("ngayVaoLamViec");
+            float luongCoBan = rs.getFloat("luongCoBan");
+            float heSoLuong = rs.getFloat("heSoLuong");
+            BacSi bs = new BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
+            listbyChucVu.add(bs);
+        }
+        return listbyChucVu;
+    }
+    
+    public static List<BacSi> listtenChuyenKhoa(Connection conn, String tenKhoa) throws SQLException{
+        String sql = "Select * from Bacsi where maChuyenKhoa= (select maKhoa from Khoa where tenKhoa = ?)";
+        PreparedStatement psmt = conn.prepareStatement(sql);
+        ResultSet rs = psmt.executeQuery();
+        psmt.setString(1, tenKhoa);
+        List<BacSi> listbytenKhoa = new ArrayList<>();
+        while (rs.next()){
+            String ID = rs.getString("ID");
+            String hoTen = rs.getString("hoTen");
+            String ngaySinh = rs.getString("ngaySinh");
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            String maKhoa = rs.getString("maChuyenKhoa");
+            Khoa khoa = new Khoa(maKhoa, tenKhoa);
+            String chucVu = rs.getString("chucVu");
+            String ngayVaoLamViec = rs.getString("ngayVaoLamViec");
+            float luongCoBan = rs.getFloat("luongCoBan");
+            float heSoLuong = rs.getFloat("heSoLuong");
+            BacSi bs = new BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
+            listbytenKhoa.add(bs);
+        }
+        return listbytenKhoa;
+    }
+    
+    public static List<BacSi> sortbyluongBacSi(Connection conn, String sort) throws SQLException{
+        String sql = "Select *, (luongCoBan * heSoLuong) as luong from BacSi order by luong ?";
+        PreparedStatement psmt = conn.prepareStatement(sql);
+        ResultSet rs = psmt.executeQuery();
+        psmt.setString(1, sort);//ASC nếu tăng dần, DESC nếu giảm dần
+        List<BacSi> listsort = new ArrayList<>();
+        while (rs.next()){
+            String ID = rs.getString("ID");
+            String hoTen = rs.getString("hoTen");
+            String ngaySinh = rs.getString("ngaySinh");
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            String maKhoa = rs.getString("maChuyenKhoa");
+            String tenKhoa = getTenKhoa(conn, maKhoa);
+            Khoa khoa = new Khoa(maKhoa, tenKhoa);
+            String chucVu = rs.getString("chucVu");
+            String ngayVaoLamViec = rs.getString("ngayVaoLamViec");
+            float luongCoBan = rs.getFloat("luongCoBan");
+            float heSoLuong = rs.getFloat("heSoLuong");
+            BacSi bs = new BacSi(ID, hoTen, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoa, chucVu, ngayVaoLamViec, luongCoBan, heSoLuong);
+            listsort.add(bs);
+        }
+        return listsort;
+    }
     
     
     //////////////////////////////////
@@ -212,25 +253,8 @@ public class DBUtils {
             String maBN = rs.getString("maBN");
             String hoTen = rs.getString("hoTen");
             String tenbenhan = rs.getString("tenBenhAn");
-            
-            java.sql.Date ngaykham = rs.getDate("ngayKham");
-            LocalDate ngayk = ngaykham.toLocalDate();
-            int ngaykh = ngayk.getDayOfMonth(); 
-            int thangkh = ngayk.getMonthValue(); 
-            int namkh = ngayk.getYear(); 
-
-            Date nk = new Date(ngaykh, thangkh, namkh);
-            
-            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
-            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
-            int ngay = ngaySinhLocal.getDayOfMonth(); 
-            int thang = ngaySinhLocal.getMonthValue(); 
-            int nam = ngaySinhLocal.getYear(); 
-
-            Date ns = new Date(ngay, thang, nam);
-            
-            
-            
+            String ngayKham = rs.getString("ngayKham");
+            String ngaySinh = rs.getString("ngaySinh");
             String diaChi = rs.getString("diaChi");
             String gioiTinh = rs.getString("gioiTinh");
             String sdt = rs.getString("sdt");
@@ -242,7 +266,7 @@ public class DBUtils {
 
             boolean nhapvien = rs.getBoolean("nhapVien");
             
-            BenhNhan bn = new BenhNhan(maBN, hoTen, tenbenhan, nk, ns, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
+            BenhNhan bn = new BenhNhan(maBN, hoTen, tenbenhan, ngayKham, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
             
             listBN.add(bn);
             
@@ -261,8 +285,8 @@ public class DBUtils {
         pstm.setString(1, bn.getMaBN());                        
         pstm.setString(2, bn.getHoTen());                        
         pstm.setString(3, bn.getTenBenhAn());
-        pstm.setDate(4, bn.getNgayKham().toSqlDate());
-        pstm.setDate(5, bn.getNgaySinh().toSqlDate());
+        pstm.setString(4, bn.getNgayKham());
+        pstm.setString(5, bn.getNgaySinh());
         pstm.setString(6, bn.getDiaChi());
         pstm.setString(7, bn.getGioiTinh());
         pstm.setString(8, bn.getSdt());
@@ -296,37 +320,17 @@ public class DBUtils {
             
             String hoTen = rs.getString("hoTen");
             String tenbenhan = rs.getString("tenBenhAn");
-            
-            java.sql.Date ngaykham = rs.getDate("ngayKham");
-            LocalDate ngayk = ngaykham.toLocalDate();
-            int ngaykh = ngayk.getDayOfMonth(); 
-            int thangkh = ngayk.getMonthValue(); 
-            int namkh = ngayk.getYear(); 
-
-            Date nk = new Date(ngaykh, thangkh, namkh);
-            
-            java.sql.Date ngaySinh = rs.getDate("ngaySinh");
-            LocalDate ngaySinhLocal = ngaySinh.toLocalDate();
-            int ngay = ngaySinhLocal.getDayOfMonth(); 
-            int thang = ngaySinhLocal.getMonthValue(); 
-            int nam = ngaySinhLocal.getYear(); 
-
-            Date ns = new Date(ngay, thang, nam);
-            
-            
-            
+            String ngayKham = rs.getString("ngayKham");
+            String ngaySinh = rs.getString("ngaySinh");
             String diaChi = rs.getString("diaChi");
             String gioiTinh = rs.getString("gioiTinh");
             String sdt = rs.getString("sdt");
-            String quocTich = rs.getString("quocTich");
-            
+            String quocTich = rs.getString("quocTich");         
             String makhoakham = rs.getString("maKhoaKham");
             String tenkhoa = getTenKhoa(conn, makhoakham);
             Khoa khoakham = new Khoa(makhoakham, tenkhoa);
-
-            boolean nhapvien = rs.getBoolean("nhapVien");
-            
-            BenhNhan bn = new BenhNhan(maBN, hoTen, tenbenhan, nk, ns, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
+            boolean nhapvien = rs.getBoolean("nhapVien");     
+            BenhNhan bn = new BenhNhan(maBN, hoTen, tenbenhan, ngayKham, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
             
             return bn;
 
@@ -347,12 +351,11 @@ public class DBUtils {
                 + "gioiTinh = ?, sdt = ?, quocTich = ?, maKhoaKham = ?, nhapVien = ? WHERE maBN = ?";
 
             PreparedStatement pstm = conn.prepareStatement(sql);
-            
-                                   
+                              
             pstm.setString(1, bn.getHoTen());                        
             pstm.setString(2, bn.getTenBenhAn());
-            pstm.setDate(3, bn.getNgayKham().toSqlDate());
-            pstm.setDate(4, bn.getNgaySinh().toSqlDate());
+            pstm.setString(3, bn.getNgayKham());
+            pstm.setString(4, bn.getNgaySinh());
             pstm.setString(5, bn.getDiaChi());
             pstm.setString(6, bn.getGioiTinh());
             pstm.setString(7, bn.getSdt());
@@ -365,4 +368,61 @@ public class DBUtils {
         }
     }
     
+    public static List<BenhNhan> listtenkhoakham(Connection conn, String tenKhoaKham) throws SQLException
+    {
+        String sql = "select * from BenhNhan where maKhoaKham = (select maKhoa from Khoa where tenKhoa = ?)";
+        PreparedStatement psmt = conn.prepareStatement(sql);
+        psmt.setString(1, tenKhoaKham);
+        ResultSet rs = psmt.executeQuery();
+        List<BenhNhan> listbytenKhoa = new ArrayList<>();
+        while (rs.next()){
+            String maBN = rs.getString("maBN");
+            String hoTen = rs.getString("hoTen");
+            String tenBenhAn = rs.getString("tenBenhAn");
+            String ngayKham = rs.getString("ngayKham");
+            String ngaySinh = rs.getString("ngaySinh");
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            String makhoakham = rs.getString("maKhoaKham");
+//            String tenkhoa = getTenKhoa(conn, makhoakham);
+            Khoa khoakham = new Khoa(makhoakham, tenKhoaKham);
+            boolean nhapvien = rs.getBoolean("nhapVien");
+            
+            BenhNhan bn = new BenhNhan(maBN, hoTen, tenBenhAn, ngayKham, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapvien);
+            
+            listbytenKhoa.add(bn);
+        }
+        return listbytenKhoa;
+    }
+    
+    public static List<BenhNhan> ListNhapvien(Connection conn, boolean nhapVien) throws SQLException{
+        String sql = "select * from BenhNhan where nhapVien= ?";
+        PreparedStatement psmt = conn.prepareStatement(sql);
+        psmt.setBoolean(1, nhapVien);
+        ResultSet rs = psmt.executeQuery();
+        List<BenhNhan> listbyNhapVien = new ArrayList<>();
+        while (rs.next()){
+            String maBN = rs.getString("maBN");
+            String hoTen = rs.getString("hoTen");
+            String tenBenhAn = rs.getString("tenBenhAn");
+            String ngayKham = rs.getString("ngayKham");
+            String ngaySinh = rs.getString("ngaySinh");
+            String diaChi = rs.getString("diaChi");
+            String gioiTinh = rs.getString("gioiTinh");
+            String sdt = rs.getString("sdt");
+            String quocTich = rs.getString("quocTich");
+            
+            String makhoakham = rs.getString("maKhoaKham");
+            String tenkhoa = getTenKhoa(conn, makhoakham);
+            Khoa khoakham = new Khoa(makhoakham, tenkhoa);
+//            boolean nhapvien = rs.getBoolean("nhapVien");
+            
+            BenhNhan bn = new BenhNhan(maBN, hoTen, tenBenhAn, ngayKham, ngaySinh, diaChi, gioiTinh, sdt, quocTich, khoakham, nhapVien);
+            
+            listbyNhapVien.add(bn);
+        }
+        return listbyNhapVien;
+    }
 }
