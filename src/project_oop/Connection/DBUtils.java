@@ -2,11 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project_oop;
+package project_oop.Connection;
 
 import java.sql.*;
 import java.util.*;
 import java.time.*;
+import project_oop.Structure.BacSi;
+import project_oop.Structure.BenhNhan;
+import project_oop.Structure.Khoa;
 
 /**
  *
@@ -160,8 +163,9 @@ public class DBUtils {
     public static List<BacSi> listChucvu(Connection conn, String chucVu) throws SQLException{
         String sql = "Select * from BacSi where chucVu= ?";
         PreparedStatement psmt = conn.prepareStatement(sql);
-        ResultSet rs = psmt.executeQuery();
         psmt.setString(1, chucVu);
+        ResultSet rs = psmt.executeQuery();
+
         List<BacSi> listbyChucVu = new ArrayList<>();
         while (rs.next()){
             String ID = rs.getString("ID");
@@ -186,8 +190,9 @@ public class DBUtils {
     public static List<BacSi> listtenChuyenKhoa(Connection conn, String tenKhoa) throws SQLException{
         String sql = "Select * from Bacsi where maChuyenKhoa= (select maKhoa from Khoa where tenKhoa = ?)";
         PreparedStatement psmt = conn.prepareStatement(sql);
-        ResultSet rs = psmt.executeQuery();
         psmt.setString(1, tenKhoa);
+        ResultSet rs = psmt.executeQuery();
+
         List<BacSi> listbytenKhoa = new ArrayList<>();
         while (rs.next()){
             String ID = rs.getString("ID");
@@ -210,10 +215,10 @@ public class DBUtils {
     }
     
     public static List<BacSi> sortbyluongBacSi(Connection conn, String sort) throws SQLException{
-        String sql = "Select *, (luongCoBan * heSoLuong) as luong from BacSi order by luong ?";
+        String sql = "Select *, (luongCoBan * heSoLuong) as luong from BacSi order by luong " + sort;
         PreparedStatement psmt = conn.prepareStatement(sql);
         ResultSet rs = psmt.executeQuery();
-        psmt.setString(1, sort);//ASC nếu tăng dần, DESC nếu giảm dần
+        //ASC nếu tăng dần, DESC nếu giảm dần
         List<BacSi> listsort = new ArrayList<>();
         while (rs.next()){
             String ID = rs.getString("ID");
