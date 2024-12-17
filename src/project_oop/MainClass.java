@@ -2,8 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package project_oop.Structure;
-
+package project_oop;
+import project_oop.Login.login;
 /**
  *
  * @author Hp
@@ -15,6 +15,7 @@ public class MainClass {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        new login().setVisible(true);
     }
     
 }
