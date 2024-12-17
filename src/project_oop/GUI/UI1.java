@@ -1310,10 +1310,10 @@ public class UI1 extends JFrame {
         return matcher.matches();
     }
     
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            UI1 frame = new UI1();
-            frame.setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            UI1 frame = new UI1();
+//            frame.setVisible(true);
+//        });
+//    }
 }
