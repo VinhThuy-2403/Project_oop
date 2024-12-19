@@ -4,6 +4,7 @@
  */
 package project_oop.GUI;
 
+
 //import project_oop.Structure.Khoa;
 import com.toedter.calendar.JDateChooser;
 import project_oop.Structure.BenhNhan;
@@ -46,7 +47,7 @@ public class UI1 extends JFrame {
     public UI1() {
         setTitle("HỆ THỐNG QUẢN LÝ BỆNH VIỆN");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
+        setSize(1500, 800);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         
@@ -231,7 +232,6 @@ public class UI1 extends JFrame {
         return suggestions;
     }
 
-    // Add search functionality
     private void performSearch(String searchText) {
         if (contentPanel == bacSiPanel) {
             searchDoctors(searchText);
@@ -240,16 +240,35 @@ public class UI1 extends JFrame {
         }
     }
     
-    private void createHomePanel(Color bgColor, Color primaryColor) {
-        homePanel = new JPanel(new BorderLayout());
-        homePanel.setBackground(bgColor);
+private void createHomePanel(Color bgColor, Color primaryColor) {
+    // Thiết lập panel chính
+    homePanel = new JPanel(new BorderLayout());
+    homePanel.setBackground(bgColor);
 
-        JLabel welcomeLabel = new JLabel("Chào mừng đến với Hệ thống Quản lý Bệnh viện!", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 25));
-        welcomeLabel.setForeground(primaryColor);
-        homePanel.add(welcomeLabel, BorderLayout.NORTH);
-        
-    }
+    // Tiêu đề ở trên cùng
+    JLabel welcomeLabel = new JLabel("Hệ thống Quản lý Bệnh viện", SwingConstants.CENTER);
+    welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 30));
+    welcomeLabel.setForeground(primaryColor);
+    welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+    homePanel.add(welcomeLabel, BorderLayout.NORTH);
+
+    // Thêm hình ảnh vào giữa trang chủ
+    ImageIcon originalImage = new ImageIcon(getClass().getResource("/project_oop/Image/hospital.png")); // Đường dẫn ảnh
+    Image scaledImage = originalImage.getImage().getScaledInstance(1500, 800, Image.SCALE_SMOOTH); // Kích thước mới
+    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+    JLabel imageLabel = new JLabel(scaledIcon);
+    imageLabel.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa ảnh
+    homePanel.add(imageLabel, BorderLayout.CENTER);
+
+    // Chân trang (footer)
+    JLabel footerLabel = new JLabel("Welcome to our Hospital Management System", SwingConstants.CENTER);
+    footerLabel.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+    footerLabel.setForeground(Color.GRAY);
+    homePanel.add(footerLabel, BorderLayout.SOUTH);
+
+    // Thêm viền cho panel chính (nếu cần)
+    homePanel.setBorder(BorderFactory.createLineBorder(primaryColor, 2));
+}
 
     private void createBacSiPanel(Color bgColor, Color primaryColor) {
         bacSiPanel = new JPanel();
@@ -371,7 +390,7 @@ public class UI1 extends JFrame {
 
         patientTableModel = new DefaultTableModel(
             new Object[]{"Mã bệnh nhân", "Họ tên", "Tên bệnh án", "Ngày khám", "Ngày sinh",
-                        "Địa chỉ", "Giới tính", "Số điện thoại", "Quốc tịch", "Mã khoa khám", "Nhập viện"}, 0
+                        "Địa chỉ", "Giới tính", "Số điện thoại", "Quốc tịch", "Mã khoa", "Nhập viện"}, 0
         ){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -385,7 +404,7 @@ public class UI1 extends JFrame {
         patientTable.setColumnSelectionAllowed(false);  // Không cho phép chọn cột
         patientTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        patientTable.getColumnModel().getColumn(0).setPreferredWidth(60);  // maBN
+        patientTable.getColumnModel().getColumn(0).setPreferredWidth(80);  // maBN
         patientTable.getColumnModel().getColumn(1).setPreferredWidth(120); // hoTen
         patientTable.getColumnModel().getColumn(2).setPreferredWidth(120); // tenBenhAn
         patientTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // ngayKham
